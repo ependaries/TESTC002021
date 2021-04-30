@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>What's On - V1</title>
+<style type='text/css'charset='utf-8' >    
+    .results{ width: 80%; margin-left: 5%; border: 1px solid gray; padding: 5px;  overflow: auto; }  
+    #now { color: red; }
+</style>
+<script>
+function parserTisseo(data){
+    var results = 'Aucune donnée disponible' ;
+        if ( data ) {
+            var departs = data.departures.departure;
+            results = '<ul>';
+            for(var i=0;i<departs.length;i=i+1){
+              if ( departs[i].dateTime ){
+                results += "<li>"+departs[i].dateTime.replace(/^\d+-\d+-\d+ /,'').replace(/:\d\d$/,'')+' '+departs[i].line.shortName+' '+departs[i].destination[0].name+'<span class="landscape"> ('+departs[i].destination[0].cityName+')</span>'+'</li>';
+              }
+            }
+            if ( results == '<ul>' ){ results += 'Aucun départ prévu'; }
+            results += '</ul>';
+        }
+    return results;
+}
+function tram_aeroconstellation(data){
+document.getElementById("resultatstramaero").innerHTML = parserTisseo(data);
+};
+function tram_palais_de_justice(data){
+document.getElementById("resultatstrampalais").innerHTML = parserTisseo(data);
+};
+
+</script>
+
+
+</head><body>
+
+<h1>What's On ...</h1>
+<div id="now"></div>
+<script type='text/javascript'>
+  var now = "le "+ (new Date()).toLocaleString() ;
+  document.getElementById('now').innerHTML = now;
+</script>
+
+<!-- DEBUT meteo -->
+<h2>Météo à Blagnac</h2>
+  <center><script charset="UTF-8" src="http://www.meteofrance.com/mf3-rpc-portlet/rest/vignettepartenaire/310690/type/VILLE_FRANCE/size/PORTRAIT_VIGNETTE" type="text/javascript"></script></center>
+<!-- FIN meteo -->
+
+<!-- DEBUT tram vers Aéroconstellation -->
+<h2> Tram T1 - Départs direction Aéroconstellation</h2>
+  <div id="resultatstramaero">
+  </div>
+<!-- FIN tram -->
+
+<!-- DEBUT tram vers Palais de Justice -->
+<h2> Tram T1 - Départs direction Palais de Justice</h2>
+  <div id="resultatstrampalais">
+  </div>
+<!-- FIN tram -->
+
+
+
+<!-- Début Agenda -->
+<h2> Mon agenda à l'IUT de Blagnac <h2>
+<iframe src="https://calendar.google.com/calendar/embed?src=v8oto978p72qqi0pedmk08vs9o%40group.calendar.google.com&ctz=Asia%2FAmman" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+<!-- fin Agenda -->
+<!-- Début Agenda -->
+
+<!-- Flux RSS -->
+<h2> Facultatif flux RSS mairie de Blagnac par exemple <h2>
+
+<!--fin flux rss -->
+
+
+<script src="http://algec.iut-blagnac.fr/jsonpv1.php?callback=tram_aeroconstellation&url=http://api.tisseo.fr/v1/stops_schedules.json?operatorCode=60140"></script>
+<script src="http://algec.iut-blagnac.fr/jsonpv1.php?callback=tram_palais_de_justice&url=http://api.tisseo.fr/v1/stops_schedules.json?operatorCode=60141"></script>
+
+
+</body>
+</html>
